@@ -4,6 +4,8 @@
 
 | Model | Input | Output | Cached Input | Free Tier |
 |-------|-------|--------|--------------|-----------|
+| `deepseek-v4-pro` | ¥3.00 | ¥6.00 | ¥0.025 | No |
+| `deepseek-v4-flash` | ¥1.00 | ¥2.00 | — | No |
 | `deepseek-chat` | ¥1.00 | ¥2.00 | ¥0.25 | No |
 | `deepseek-reasoner` | ¥4.00 | ¥16.00 | ¥1.00 | No |
 | `qwen-plus` | ¥2.00 | ¥6.00 | — | No |
@@ -21,6 +23,8 @@
 
 | Model | Context | Vision | Function Calling | Streaming | Best For |
 |-------|---------|--------|------------------|-----------|----------|
+| `deepseek-v4-pro` | 1M | ❌ | ✅ | ✅ | Agent, code, reasoning |
+| `deepseek-v4-flash` | 1M | ❌ | ✅ | ✅ | General, budget, speed |
 | `deepseek-chat` | 64K | ❌ | ✅ | ✅ | General chat |
 | `deepseek-reasoner` | 64K | ❌ | ❌ | ✅ | Math, code, logic |
 | `qwen-plus` | 128K | ❌ | ✅ | ✅ | Chinese text |
@@ -36,10 +40,11 @@
 
 | Task | Best Model | Budget Model |
 |------|-----------|--------------|
-| General chat (EN) | `deepseek-chat` | `deepseek-chat` |
+| General chat (EN) | `deepseek-v4-pro` | `deepseek-v4-flash` |
 | General chat (CN) | `qwen-max` | `qwen-plus` |
-| Coding | `deepseek-chat` | `deepseek-chat` |
-| Math / Logic | `deepseek-reasoner` | `deepseek-chat` |
+| Coding | `deepseek-v4-pro` | `deepseek-v4-flash` |
+| Math / Logic | `deepseek-v4-pro` | `deepseek-v4-flash` |
+| Agent / Tool use | `deepseek-v4-pro` | `glm-4-plus` |
 | Translation | `qwen-plus` | `glm-4-flash` |
 | Summarization | `kimi-128k` | `deepseek-chat` |
 | Tool use / Agents | `glm-4-plus` | `deepseek-chat` |

@@ -77,8 +77,10 @@ Open `http://localhost:4000/ui` — manage API keys, set rate limits, track spen
 
 | Model | Provider | Strengths | Input Price | Output Price |
 |-------|----------|-----------|-------------|---------------|
-| `deepseek-chat` | DeepSeek V3 | Best price/performance | ¥1/M | ¥2/M |
-| `deepseek-reasoner` | DeepSeek R1 | Math, code, logic | ¥4/M | ¥16/M |
+| `deepseek-v4-pro` | DeepSeek V4 | Agent-ready, 1M ctx, near Opus 4.6 | ¥3/M | ¥6/M |
+| `deepseek-v4-flash` | DeepSeek V4 | Lightweight, thinking mode | ¥1/M | ¥2/M |
+| `deepseek-chat` | DeepSeek V3 | Legacy — deprecated 2026-07 | ¥1/M | ¥2/M |
+| `deepseek-reasoner` | DeepSeek R1 | Legacy — deprecated 2026-07 | ¥4/M | ¥16/M |
 | `qwen-plus` | Alibaba Qwen | Chinese understanding | ¥2/M | ¥6/M |
 | `qwen-max` | Alibaba Qwen | Best Chinese quality | ¥20/M | ¥60/M |
 | `qwen-vl-plus` | Alibaba Qwen | Image understanding | ¥2/M | ¥6/M |
