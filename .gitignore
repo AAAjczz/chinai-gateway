@@ -1,0 +1,20 @@
+# .env — your secrets, never commit
+.env
+
+# LiteLLM data
+litellm-data/
+# PostgreSQL data
+pgdata/
+
+# Docker
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
