@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinai Gateway — One API for Chinese AI Models</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Hero */
+        header {
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+        .badge a { color: #6c8cff; text-decoration: none; }
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        h1 span { color: #6c8cff; }
+        .subtitle {
+            font-size: 20px;
+            color: #888;
+            max-width: 560px;
+            margin: 0 auto 40px;
+        }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #6c8cff; color: #fff; }
+        .btn-primary:hover { background: #5a7af0; }
+        .btn-outline { border: 1px solid #333; color: #ccc; }
+        .btn-outline:hover { border-color: #666; color: #fff; }
+
+        /* Demo bar */
+        .demo-bar {
+            background: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin: 48px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .demo-bar .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+        .demo-bar code {
+            font-size: 14px;
+            color: #4ade80;
+            background: #0d0d14;
+            padding: 6px 12px;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 260px;
+            word-break: break-all;
+        }
+
+        /* Sections */
+        section { padding: 60px 0; }
+        section h2 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        section p { color: #999; margin-bottom: 24px; }
+
+        /* Model cards */
+        .models {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .model-card {
+            background: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .model-card .name { font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .model-card .provider { font-size: 13px; color: #666; margin-bottom: 8px; }
+        .model-card .price { font-size: 13px; color: #6c8cff; }
+        .model-card .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 8px;
+            background: #1a1a2e;
+            color: #888;
+        }
+
+        /* Code block */
+        .code-block {
+            background: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .code-block .lang {
+            font-size: 12px;
+            color: #666;
+            padding: 10px 18px;
+            border-bottom: 1px solid #1e1e2e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .code-block pre {
+            padding: 18px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .code-block .c1 { color: #6c8cff; }
+        .code-block .c2 { color: #4ade80; }
+        .code-block .c3 { color: #f59e0b; }
+        .code-block .c4 { color: #ec4899; }
+
+        /* Feature grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        .feature {
+            background: #111118;
+            border: 1px solid #1e1e2e;
+            border-radius: 10px;
+            padding: 24px;
+        }
+        .feature .icon { font-size: 24px; margin-bottom: 12px; }
+        .feature h3 { font-size: 16px; color: #fff; margin-bottom: 8px; }
+        .feature p { font-size: 14px; margin-bottom: 0; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            color: #555;
+            font-size: 14px;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 40px;
+        }
+        footer a { color: #6c8cff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="badge">
+            Open Source &middot; MIT License &middot; <a href="https://github.com/AAAjczz/chinai-gateway">GitHub</a>
+        </div>
+        <h1>Chinese AI Models,<br><span>One API.</span></h1>
+        <p class="subtitle">
+            Self-hosted OpenAI-compatible gateway for DeepSeek, Qwen, GLM, and Kimi.
+            Deploy on your server. Use your own keys. No third-party middleman.
+        </p>
+        <div class="btn-group">
+            <a href="https://github.com/AAAjczz/chinai-gateway" class="btn btn-primary">View on GitHub</a>
+            <a href="#quickstart" class="btn btn-outline">Quick Start →</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="demo-bar">
+        <span class="label">Demo Endpoint</span>
+        <code>https://scdqigate.xyz/v1/chat/completions</code>
+    </div>
+</div>
+
+<section id="quickstart">
+    <div class="container">
+        <h2>5-Minute Deploy</h2>
+        <p>One command. Your server. Your keys.</p>
+        <div class="code-block">
+            <div class="lang">Terminal</div>
+            <pre><span class="c1"># Clone and start</span>
+git clone https://github.com/AAAjczz/chinai-gateway.git
+cd chinai-gateway
+cp .env.example .env
+<span class="c1"># Add your DeepSeek API key to .env</span>
+docker compose up -d
+
+<span class="c1"># That's it. Your gateway is live at localhost:4000</span>
+curl -X POST http://localhost:4000/v1/chat/completions \
+  -H <span class="c2">"Authorization: Bearer YOUR_KEY"</span> \
+  -H <span class="c2">"Content-Type: application/json"</span> \
+  -d <span class="c2">'{"model":"deepseek-chat","messages":[{"role":"user","content":"Hi"}]}'</span></pre>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Why Self-Host?</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="icon">🔑</div>
+                <h3>Your Keys, Your Data</h3>
+                <p>API keys never leave your server. No third party sees your requests or responses.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">💰</div>
+                <h3>Massive Cost Savings</h3>
+                <p>Chinese models cost ¥1–20 per million tokens. Western models? $5–15. That's 10–50x cheaper.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🔌</div>
+                <h3>OpenAI-Compatible</h3>
+                <p>Drop-in replacement. Works with any OpenAI SDK, LangChain, AutoGPT, or ChatGPT client.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🖥️</div>
+                <h3>Admin Dashboard</h3>
+                <p>Built-in UI for usage tracking, virtual keys, rate limiting, and cost monitoring.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🌐</div>
+                <h3>10+ Models, One Endpoint</h3>
+                <p>Switch between DeepSeek, Qwen, GLM, and Kimi by changing one model name. No code changes.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">📦</div>
+                <h3>Runs on a $2 VPS</h3>
+                <p>~400 MB RAM. Fits alongside your other services. No GPU needed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Supported Models</h2>
+        <div class="models">
+            <div class="model-card">
+                <div class="name">DeepSeek-V3</div>
+                <div class="provider">deepseek-chat</div>
+                <div class="price">¥1 / ¥2 per 1M tokens</div>
+                <span class="tag">General Chat</span>
+                <span class="tag">64K Context</span>
+            </div>
+            <div class="model-card">
+                <div class="name">DeepSeek-R1</div>
+                <div class="provider">deepseek-reasoner</div>
+                <div class="price">¥4 / ¥16 per 1M tokens</div>
+                <span class="tag">Math & Logic</span>
+                <span class="tag">Chain-of-Thought</span>
+            </div>
+            <div class="model-card">
+                <div class="name">Qwen-Plus</div>
+                <div class="provider">qwen-plus</div>
+                <div class="price">¥2 / ¥6 per 1M tokens</div>
+                <span class="tag">Chinese Text</span>
+                <span class="tag">128K Context</span>
+            </div>
+            <div class="model-card">
+                <div class="name">Qwen-Max</div>
+                <div class="provider">qwen-max</div>
+                <div class="price">¥20 / ¥60 per 1M tokens</div>
+                <span class="tag">Best Chinese</span>
+                <span class="tag">Flagship</span>
+            </div>
+            <div class="model-card">
+                <div class="name">GLM-4-Plus</div>
+                <div class="provider">glm-4-plus</div>
+                <div class="price">¥1 / ¥4 per 1M tokens</div>
+                <span class="tag">Tool Calling</span>
+                <span class="tag">128K Context</span>
+            </div>
+            <div class="model-card">
+                <div class="name">GLM-4-Flash</div>
+                <div class="provider">glm-4-flash</div>
+                <div class="price">Free</div>
+                <span class="tag">Speed</span>
+                <span class="tag">Free Tier</span>
+            </div>
+            <div class="model-card">
+                <div class="name">Kimi</div>
+                <div class="provider">kimi</div>
+                <div class="price">¥12 / ¥12 per 1M tokens</div>
+                <span class="tag">File Reading</span>
+                <span class="tag">8K Context</span>
+            </div>
+            <div class="model-card">
+                <div class="name">Kimi-128K</div>
+                <div class="provider">kimi-128k</div>
+                <div class="price">¥60 / ¥60 per 1M tokens</div>
+                <span class="tag">Long Docs</span>
+                <span class="tag">128K Context</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Clients & SDKs</h2>
+        <div class="code-block">
+            <div class="lang">Python</div>
+            <pre><span class="c1">from</span> openai <span class="c1">import</span> OpenAI
+
+client = OpenAI(
+    api_key=<span class="c2">"YOUR_MASTER_KEY"</span>,
+    base_url=<span class="c2">"http://localhost:4000/v1"</span>
+)
+
+response = client.chat.completions.create(
+    model=<span class="c2">"deepseek-chat"</span>,
+    messages=[{<span class="c2">"role"</span>: <span class="c2">"user"</span>, <span class="c2">"content"</span>: <span class="c2">"Hello!"</span>}]
+)</pre>
+        </div>
+        <p style="margin-top:16px;">
+            Works with <strong>any</strong> OpenAI-compatible client: ChatGPT desktop apps, Cursor, LangChain, LlamaIndex, AutoGPT, and more.
+        </p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>
+            <a href="https://github.com/AAAjczz/chinai-gateway">GitHub</a> &middot;
+            <a href="https://github.com/AAAjczz/chinai-gateway/blob/master/docs/deployment.md">Deployment Guide</a> &middot;
+            <a href="https://github.com/AAAjczz/chinai-gateway/blob/master/docs/models.md">Model Comparison</a> &middot;
+            MIT License
+        </p>
+        <p style="margin-top:8px;">Built by <a href="https://github.com/AAAjczz">@AAAjczz</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
