@@ -218,7 +218,7 @@ docker compose up -d
 curl -X POST http://localhost:4000/v1/chat/completions \
   -H <span class="c2">"Authorization: Bearer YOUR_KEY"</span> \
   -H <span class="c2">"Content-Type: application/json"</span> \
-  -d <span class="c2">'{"model":"deepseek-chat","messages":[{"role":"user","content":"Hi"}]}'</span></pre>
+  -d <span class="c2">'{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hi"}]}'</span></pre>
         </div>
     </div>
 </section>
@@ -266,18 +266,20 @@ curl -X POST http://localhost:4000/v1/chat/completions \
         <h2>Supported Models</h2>
         <div class="models">
             <div class="model-card">
-                <div class="name">DeepSeek-V3</div>
-                <div class="provider">deepseek-chat</div>
-                <div class="price">¥1 / ¥2 per 1M tokens</div>
-                <span class="tag">General Chat</span>
-                <span class="tag">64K Context</span>
+                <div class="name">DeepSeek V4 Pro</div>
+                <div class="provider">deepseek-v4-pro</div>
+                <div class="price">¥3 / ¥6 per 1M tokens</div>
+                <span class="tag">Flagship</span>
+                <span class="tag">1M Context</span>
+                <span class="tag">Agent-Ready</span>
             </div>
             <div class="model-card">
-                <div class="name">DeepSeek-R1</div>
-                <div class="provider">deepseek-reasoner</div>
-                <div class="price">¥4 / ¥16 per 1M tokens</div>
-                <span class="tag">Math & Logic</span>
-                <span class="tag">Chain-of-Thought</span>
+                <div class="name">DeepSeek V4 Flash</div>
+                <div class="provider">deepseek-v4-flash</div>
+                <div class="price">¥1 / ¥2 per 1M tokens</div>
+                <span class="tag">Lightweight</span>
+                <span class="tag">1M Context</span>
+                <span class="tag">Thinking Mode</span>
             </div>
             <div class="model-card">
                 <div class="name">Qwen-Plus</div>

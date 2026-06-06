@@ -3,9 +3,32 @@ general_settings:
 
 model_list:
   # ============================================================
-  # DeepSeek — 性价比之王
-  # ¥1/百万token (输入), ¥2/百万token (输出)
+  # DeepSeek V4 — 2026.04 发布，1M 上下文，Agent 能力开源最强
+  # deepseek-chat / deepseek-reasoner 将于 2026.07 下线
   # ============================================================
+  - model_name: deepseek-v4-pro
+    litellm_params:
+      model: deepseek/deepseek-v4-pro
+      api_key: os.environ/DEEPSEEK_API_KEY
+    model_info:
+      mode: chat
+      max_tokens: 384000
+      supports_function_calling: true
+      supports_vision: false
+      description: "DeepSeek-V4-Pro (1.6T MoE, 49B active) — flagship, near Opus 4.6 agent performance"
+
+  - model_name: deepseek-v4-flash
+    litellm_params:
+      model: deepseek/deepseek-v4-flash
+      api_key: os.environ/DEEPSEEK_API_KEY
+    model_info:
+      mode: chat
+      max_tokens: 384000
+      supports_function_calling: true
+      supports_vision: false
+      description: "DeepSeek-V4-Flash (284B, 13B active) — lightweight, best price/performance"
+
+  # Legacy (deprecated after 2026-07-24, kept for compatibility)
   - model_name: deepseek-chat
     litellm_params:
       model: deepseek/deepseek-chat
@@ -15,7 +38,7 @@ model_list:
       max_tokens: 65536
       supports_function_calling: true
       supports_vision: false
-      description: "DeepSeek-V3 — general purpose chat, best price/performance"
+      description: "[LEGACY] DeepSeek-V3 — will be deprecated, use deepseek-v4-pro instead"
 
   - model_name: deepseek-reasoner
     litellm_params:
@@ -26,7 +49,7 @@ model_list:
       max_tokens: 65536
       supports_function_calling: false
       supports_vision: false
-      description: "DeepSeek-R1 — chain-of-thought reasoning, best for math/code/logic"
+      description: "[LEGACY] DeepSeek-R1 — will be deprecated, use deepseek-v4-pro with thinking mode instead"
 
   # ============================================================
   # Qwen 系列 (阿里百炼) — 中文理解最强
