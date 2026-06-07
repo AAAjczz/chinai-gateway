@@ -472,7 +472,7 @@ footer .foot-right a:hover{color:#fff}
         </div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--text3);margin-top:12px;text-align:center">💡 Demo key: read-only · $0.05 budget · 10 RPM · DeepSeek V4 Pro & Flash only. Full access: <a href="https://github.com/AAAjczz/chinai-gateway#quick-start">deploy your own</a> (free, MIT, 5 min).</p>
+    <p style="font-size:11px;color:var(--text3);margin-top:12px;text-align:center">💡 Demo key: restricted · $0.05 cap · 10 RPM · DeepSeek V4 Pro & Flash only. For full access: <a href="https://github.com/AAAjczz/chinai-gateway#quick-start">deploy your own</a> (free, MIT, 5 min).</p>
   </div>
 </section>
 
@@ -569,7 +569,7 @@ client = OpenAI(
 
 <span class="n">Alice</span>   → <span class="s">sk-alice-key</span>   <span class="h">$20/month budget, 100 RPM</span>
 <span class="n">Bob</span>     → <span class="s">sk-bob-key</span>     <span class="h">$10/month budget, 50 RPM</span>
-<span class="n">Charlie</span> → <span class="s">sk-charlie-key</span> <span class="h">$5/month budget, read-only models</span>
+<span class="n">Charlie</span> → <span class="s">sk-charlie-key</span> <span class="h">$5/month budget, model-scoped access</span>
 
 <span class="h"># Each key logs usage independently.
 # Budget exhausted → auto-blocks. No surprises.</span>
@@ -859,7 +859,7 @@ response = llm.invoke(<span class="c2">"What is the capital of France?"</span>)
     <div class="faq-list">
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">Is this a hosted service or a paid product?<span class="faq-icon">+</span></button>
-        <div class="faq-a"><p>Neither. Chinai Gateway is free, open-source software (MIT) that you deploy on your own server. We don't run a hosted version. We don't charge anything. We don't see your data, keys, or traffic. The demo at chinaigateway.xyz is just that — a demo — running on a $2/month VPS with a read-only DeepSeek key capped at $0.05.</p></div>
+        <div class="faq-a"><p>Neither. Chinai Gateway is free, open-source software (MIT) that you deploy on your own server. We don't run a hosted version. We don't charge anything. We don't see your data, keys, or traffic. The demo at chinaigateway.xyz is just that — a demo — running on a $2/month VPS with a restricted DeepSeek key (strict rate limit, $0.05 cap).</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)">How is this different from OpenRouter?<span class="faq-icon">+</span></button>

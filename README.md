@@ -12,7 +12,7 @@ curl -X POST https://chinaigateway.xyz/v1/chat/completions \
   -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hello!"}]}'
 ```
 
-> The demo key is read-only with a strict rate limit. For production, [deploy your own](#quick-start).
+> The demo key is restricted — strict rate limit, $0.05 budget cap, DeepSeek models only. For production, [deploy your own](#quick-start).
 
 ## Why
 

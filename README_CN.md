@@ -12,7 +12,7 @@ curl -X POST https://chinaigateway.xyz/v1/chat/completions \
   -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"你好"}]}'
 ```
 
-> 演示 Key 为只读，有严格限速。生产环境请[自行部署](#快速开始)。
+> 演示 Key 受限——严格限速、$0.05 额度上限、仅提供 DeepSeek 模型。生产环境请[自行部署](#快速开始)。
 
 ## 为什么
 
