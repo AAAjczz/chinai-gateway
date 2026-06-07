@@ -41,14 +41,18 @@ curl -X POST https://chinaigateway.xyz/v1/chat/completions \
 git clone https://github.com/AAAjczz/chinai-gateway.git
 cd chinai-gateway
 cp .env.example .env
-# 编辑 .env —— 填入你的 API Key
+# 编辑 .env —— 填入你的 API Key，并修改所有默认密码
 ```
+
+> ⚠️ **不要跳过这一步。** `.env` 里有占位密码。使用默认值部署到公网，你的实例几分钟内就会被劫持。
 
 ### 2. 启动
 
 ```bash
 docker compose up -d
 ```
+
+> 默认监听 `0.0.0.0:4000`。生产环境请在前面加 nginx 或 Caddy 做 TLS 终止。参见[安全](#安全)。
 
 ### 3. 调用
 
@@ -115,6 +119,29 @@ print(response.choices[0].message.content)
 | **智谱 GLM** | [open.bigmodel.cn](https://open.bigmodel.cn) | GLM-4-Flash 有免费额度 |
 | **月之暗面 Kimi** | [platform.moonshot.cn](https://platform.moonshot.cn) | 长上下文专家 |
 | **百度文心 ERNIE** | [console.bce.baidu.com/qianfan](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application) | ERNIE-Speed 免费额度 |
+
+## 安全
+
+### 在暴露到公网之前
+
+1. **修改所有默认值。** `.env` 里有占位密码。在 `docker compose up` 之前务必替换 `LITELLM_MASTER_KEY`、`LITELLM_SALT_KEY`、`UI_PASSWORD` 和 `DB_PASSWORD`。
+2. **前面加反向代理。** LiteLLM 监听 4000 端口。不要直接暴露到公网。用 nginx 或 Caddy 做 TLS 终止。
+3. **防火墙只留 443。** VPS 只对外开放 80 和 443 端口。
+4. **定期轮换 master key。** master key 是 root 权限。在管理后台为应用创建有权限范围的 key。
+
+### 信任边界
+
+- **你 → 你的服务器**：HTTPS，传输加密
+- **你的服务器 → 模型厂商**：HTTPS，API Key 认证
+- **API Key**：存在你的 `.env` 文件里，不会发给我们（我们不提供服务）
+
+### 日志记录了什么
+
+LiteLLM 默认在 PostgreSQL 中记录请求元数据（模型、token 数、延迟）。这些数据保存在你自己的服务器上。请求体默认不记录，除非你手动开启。在[管理后台](http://localhost:4000/ui)可以配置。
+
+### 报告漏洞
+
+发现安全问题？在 GitHub 提 issue 或直接联系维护者。每份报告我们都会认真对待。
 
 ## 常见问题
 

@@ -41,14 +41,18 @@ Chinese AI models are 10x cheaper than Western alternatives. But each provider h
 git clone https://github.com/AAAjczz/chinai-gateway.git
 cd chinai-gateway
 cp .env.example .env
-# Edit .env — add your API keys
+# Edit .env — add your API keys AND change all default passwords
 ```
+
+> ⚠️ **Do not skip this.** The `.env` has placeholder passwords. Deploying with defaults on a public server will get your instance hijacked within minutes.
 
 ### 2. Start
 
 ```bash
 docker compose up -d
 ```
+
+> This exposes port 4000 on `0.0.0.0` by default. For production, put nginx or Caddy in front with TLS. See [Security](#security).
 
 ### 3. Use it
 
@@ -132,6 +136,29 @@ DeepSeek  Qwen   GLM    Kimi    ERNIE
 - **Memory footprint** — ~430MB, runs on a $5 VPS
 - **Your API keys** stay in your `.env` file
 - **Your data** stays on your server
+
+## Security
+
+### Before you expose this to the internet
+
+1. **Change all defaults.** `.env` has placeholder values. Replace `LITELLM_MASTER_KEY`, `LITELLM_SALT_KEY`, `UI_PASSWORD`, and `DB_PASSWORD` before `docker compose up`.
+2. **Put a reverse proxy in front.** LiteLLM listens on port 4000. Do NOT expose it directly. Use nginx or Caddy to terminate TLS.
+3. **Firewall everything except 443.** Your VPS should only have ports 80 and 443 open to the world.
+4. **Rotate your master key regularly.** The master key is root. Create scoped keys for applications via the Admin UI.
+
+### Trust boundaries
+
+- **You → Your server**: HTTPS, encrypted in transit
+- **Your server → Model providers**: HTTPS, API key auth
+- **API keys**: Stored in your `.env` file, never sent to us (we don't run a service)
+
+### What's logged
+
+LiteLLM logs request metadata (model, tokens, latency) to PostgreSQL by default. This data stays on your server. Request bodies are not logged unless you enable it. See the [Admin UI](http://localhost:4000/ui) to configure logging.
+
+### Reporting
+
+Found a security issue? Open a GitHub issue or email the maintainer directly. We take every report seriously.
 
 ## FAQ
 
