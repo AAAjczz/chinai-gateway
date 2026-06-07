@@ -45,6 +45,8 @@ cp .env.example .env
 ```
 
 > ⚠️ **不要跳过这一步。** `.env` 里有占位密码。使用默认值部署到公网，你的实例几分钟内就会被劫持。
+>
+> 生产环境请参考完整的[加固指南](docs/hardening.md)。
 
 ### 2. 启动
 
@@ -120,6 +122,26 @@ print(response.choices[0].message.content)
 | **月之暗面 Kimi** | [platform.moonshot.cn](https://platform.moonshot.cn) | 长上下文专家 |
 | **百度文心 ERNIE** | [console.bce.baidu.com/qianfan](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application) | ERNIE-Speed 免费额度 |
 
+## 架构
+
+```
+你的应用 → https://your-domain.com/v1/chat/completions
+                    ↓
+              nginx / Caddy (TLS 终止, 限速)
+                    ↓
+              LiteLLM Proxy (Docker, 127.0.0.1:4000)
+                    ↓
+    ┌──────┬──────┬──────┬──────┐
+    ↓      ↓      ↓      ↓
+DeepSeek  Qwen   GLM    Kimi    ERNIE
+```
+
+- **自包含**——Docker Compose + PostgreSQL 一条命令
+- **轻量**——~430MB 内存，$5 VPS 就能跑
+- **你的 Key** 留在你的 `.env` 文件里
+- **你的数据** 不出你的服务器
+- **默认安全**——网关只监听 `127.0.0.1`，不直接暴露
+
 ## 安全
 
 ### 在暴露到公网之前
@@ -141,7 +163,11 @@ LiteLLM 默认在 PostgreSQL 中记录请求元数据（模型、token 数、延
 
 ### 报告漏洞
 
-发现安全问题？在 GitHub 提 issue 或直接联系维护者。每份报告我们都会认真对待。
+发现安全问题？见 [SECURITY.md](SECURITY.md) 了解如何私下报告。
+
+### 生产加固
+
+部署到生产环境？参考[加固指南](docs/hardening.md)——反向代理、防火墙、密钥轮换、备份。
 
 ## 常见问题
 

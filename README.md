@@ -45,6 +45,8 @@ cp .env.example .env
 ```
 
 > ⚠️ **Do not skip this.** The `.env` has placeholder passwords. Deploying with defaults on a public server will get your instance hijacked within minutes.
+> 
+> For production, follow the full [Hardening Guide](docs/hardening.md).
 
 ### 2. Start
 
@@ -123,9 +125,11 @@ See [docs/models.md](docs/models.md) for detailed comparison.
 ## Architecture
 
 ```
-Your App → localhost:4000/v1/chat/completions (OpenAI format)
+Your App → https://your-domain.com/v1/chat/completions
                     ↓
-              LiteLLM Proxy (Docker)
+              nginx / Caddy (TLS termination, rate limiting)
+                    ↓
+              LiteLLM Proxy (Docker, 127.0.0.1:4000)
                     ↓
     ┌──────┬──────┬──────┬──────┐
     ↓      ↓      ↓      ↓
@@ -136,6 +140,7 @@ DeepSeek  Qwen   GLM    Kimi    ERNIE
 - **Memory footprint** — ~430MB, runs on a $5 VPS
 - **Your API keys** stay in your `.env` file
 - **Your data** stays on your server
+- **Secure by default** — gateway binds `127.0.0.1`, never exposed to the internet directly
 
 ## Security
 
@@ -158,7 +163,11 @@ LiteLLM logs request metadata (model, tokens, latency) to PostgreSQL by default.
 
 ### Reporting
 
-Found a security issue? Open a GitHub issue or email the maintainer directly. We take every report seriously.
+Found a security issue? See [SECURITY.md](SECURITY.md) for how to report it privately.
+
+### Hardening
+
+Deploying to production? Follow the [Hardening Guide](docs/hardening.md) — reverse proxy, firewall, key rotation, backups.
 
 ## FAQ
 

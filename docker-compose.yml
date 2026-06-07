@@ -10,6 +10,8 @@ services:
     image: postgres:16-alpine
     container_name: chinai-db
     restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
     environment:
       POSTGRES_DB: litellm
       POSTGRES_USER: litellm
@@ -26,8 +28,12 @@ services:
     image: ghcr.io/berriai/litellm:main-stable
     container_name: chinai-gateway
     restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
     ports:
-      - "${LITELLM_PORT:-4000}:4000"
+      # Bind 127.0.0.1 — never expose LiteLLM directly to the internet.
+      # Put nginx/Caddy in front with TLS. See docs/hardening.md
+      - "127.0.0.1:${LITELLM_PORT:-4000}:4000"
     environment:
       DATABASE_URL: "postgresql://litellm:${DB_PASSWORD:?err: DB_PASSWORD must be set in .env}@db:5432/litellm"
       STORE_MODEL_IN_DB: "True"
