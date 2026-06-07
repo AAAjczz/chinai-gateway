@@ -7,7 +7,7 @@ Self-hosted. Bring your own keys. Zero data leaves your server.
 ```bash
 # Try it on our demo server (no deployment needed)
 curl -X POST https://chinaigateway.xyz/v1/chat/completions \
-  -H "Authorization: Bearer sk-MORsuxkFFk-2iigyKXrbTA" \
+  -H "Authorization: Bearer sk-IxF6ZNzPH_M-4_LyxB8Dlg" \
   -H "Content-Type: application/json" \
   -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hello!"}]}'
 ```
