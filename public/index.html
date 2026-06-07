@@ -982,33 +982,28 @@ function animateCounters(){
 const DK='sk-IxF6ZNzPH_M-4_LyxB8Dlg',DU='https://chinaigateway.xyz/v1/chat/completions',DM=['deepseek-v4-pro','deepseek-v4-flash'];
 let _pgBusy=false;
 async function runPlayground(){
-  if(_pgBusy){console.log('[PG] blocked: still busy');return}
+  if(_pgBusy)return;
   _pgBusy=true;
   try{
     const ta=document.getElementById('pgPrompt'),sel=document.getElementById('pgModel');
     const o=document.getElementById('pgOutput'),ti=document.getElementById('pgTokenInfo'),b=document.getElementById('pgSendBtn');
-    if(!ta||!sel||!o||!b){console.error('[PG] missing DOM element',{ta:!!ta,sel:!!sel,o:!!o,b:!!b});return}
+    if(!ta||!sel||!o||!b||!ti){_pgBusy=false;return}
     const p=ta.value.trim(),m=sel.value;
-    console.log('[PG] start model='+m+' promptLen='+p.length);
     if(!p){_pgBusy=false;return}
     if(!DM.includes(m)){o.innerHTML='<div class=error>⚠ <strong>'+escapeHtml(m)+'</strong> is not available on this demo server.<br><br>The demo only runs DeepSeek V4 Pro & Flash.<br><br>To use all 14 models: <a href="https://github.com/AAAjczz/chinai-gateway#quick-start" style="color:var(--accent)">deploy your own instance</a> — free, MIT licensed, 5 minutes.</div>';ti.style.display='none';_pgBusy=false;return}
     o.innerHTML='<div class=pg-loading><div class=spinner></div>Calling '+m+'...</div>';ti.style.display='none';b.disabled=true;b.textContent='...';
     const ac=new AbortController(),to=setTimeout(()=>ac.abort(),30000);
     try{
-      console.log('[PG] fetching...');
       const r=await fetch(DU+'?_t='+Date.now(),{method:'POST',cache:'no-store',headers:{'Authorization':'Bearer '+DK,'Content-Type':'application/json'},body:JSON.stringify({model:m,messages:[{role:'user',content:p}],stream:false}),signal:ac.signal});
       clearTimeout(to);
-      console.log('[PG] fetch done status='+r.status);
       const d=await r.json();
       if(!r.ok)throw new Error(d.error?.message||'HTTP '+r.status);
       const c=d.choices?.[0]?.message?.content||'(empty)',u=d.usage,mu=d.model||m;
       o.innerHTML='<div class=response>'+escapeHtml(c)+'</div>';
       if(u){ti.innerHTML='Model: <span>'+escapeHtml(mu)+'</span> · Prompt: <span>'+u.prompt_tokens+'</span> · Completion: <span>'+u.completion_tokens+'</span> · Total: <span>'+u.total_tokens+'</span> tokens';ti.style.display='block'}
-      console.log('[PG] success');
-    }catch(e){clearTimeout(to);console.error('[PG] fetch error',e);o.innerHTML='<div class=error>⚠ '+(e.name==='AbortError'?'Request timed out after 30s. The model may be overloaded — try again or switch to DeepSeek V4 Pro.':escapeHtml(e.message))+'</div>'}
+    }catch(e){clearTimeout(to);o.innerHTML='<div class=error>⚠ '+(e.name==='AbortError'?'Request timed out after 30s. The model may be overloaded — try again or switch to DeepSeek V4 Pro.':escapeHtml(e.message))+'</div>'}
     finally{b.disabled=false;b.textContent='▶ Send'}
   }catch(e){
-    console.error('[PG] sync error',e);
     const o=document.getElementById('pgOutput');if(o)o.innerHTML='<div class=error>⚠ Internal error: '+escapeHtml(e.message)+'</div>';
     const b=document.getElementById('pgSendBtn');if(b){b.disabled=false;b.textContent='▶ Send'}
   }
