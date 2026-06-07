@@ -1,6 +1,6 @@
 # Chinai Gateway
 
-**One command to unify DeepSeek, Qwen, GLM, and Kimi behind a single OpenAI-compatible API.**
+**One command to unify DeepSeek, Qwen, GLM, Kimi, and ERNIE behind a single OpenAI-compatible API.**
 
 Self-hosted. Bring your own keys. Zero data leaves your server.
 
@@ -99,6 +99,8 @@ Open `http://localhost:4000/ui` — manage API keys, set rate limits, track spen
 | `glm-4v-plus` | Zhipu GLM | Chinese OCR | ¥5/M | ¥5/M |
 | `kimi` | Moonshot | Document analysis | ¥12/M | ¥12/M |
 | `kimi-128k` | Moonshot | Ultra-long context | ¥60/M | ¥60/M |
+| `ernie-4.0-turbo` | Baidu ERNIE | Search-enhanced Chinese | ¥4/M | ¥12/M |
+| `ernie-speed` | Baidu ERNIE | Fast & free tier | Free | Free |
 
 *Prices are approximate. Check provider websites for current pricing.*
 
@@ -112,6 +114,7 @@ See [docs/models.md](docs/models.md) for detailed comparison.
 | **Qwen (Alibaba)** | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com) | Requires Alibaba Cloud account |
 | **GLM (Zhipu)** | [open.bigmodel.cn](https://open.bigmodel.cn) | GLM-4-Flash has free tier |
 | **Kimi (Moonshot)** | [platform.moonshot.cn](https://platform.moonshot.cn) | 128K context specialist |
+| **ERNIE (Baidu)** | [console.bce.baidu.com/qianfan](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application) | ERNIE-Speed free tier |
 
 ## Architecture
 
@@ -122,7 +125,7 @@ Your App → localhost:4000/v1/chat/completions (OpenAI format)
                     ↓
     ┌──────┬──────┬──────┬──────┐
     ↓      ↓      ↓      ↓
-DeepSeek  Qwen   GLM    Kimi
+DeepSeek  Qwen   GLM    Kimi    ERNIE
 ```
 
 - **Self-contained** — Docker Compose, PostgreSQL included

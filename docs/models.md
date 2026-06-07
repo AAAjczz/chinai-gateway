@@ -16,6 +16,8 @@
 | `glm-4v-plus` | ¥5.00 | ¥5.00 | — | No |
 | `kimi` (8K) | ¥12.00 | ¥12.00 | — | No |
 | `kimi-128k` | ¥60.00 | ¥60.00 | — | No |
+| `ernie-4.0-turbo` | ¥4.00 | ¥12.00 | — | No |
+| `ernie-speed` | Free | Free | — | Yes |
 
 *USD equivalents: roughly divide CNY by 7.*
 
@@ -35,6 +37,8 @@
 | `glm-4v-plus` | 16K | ✅ | ✅ | ✅ | Chinese OCR |
 | `kimi` | 8K | ❌ | ✅ | ✅ | File reading |
 | `kimi-128k` | 128K | ❌ | ✅ | ✅ | Long docs |
+| `ernie-4.0-turbo` | 8K | ❌ | ✅ | ✅ | Search-enhanced Chinese |
+| `ernie-speed` | 128K | ❌ | ✅ | ✅ | Fast, free tier |
 
 ## Recommendation by Task
 
@@ -51,3 +55,4 @@
 | Image understanding | `qwen-vl-plus` | — |
 | Document OCR (CN) | `glm-4v-plus` | — |
 | Long document QA | `kimi-128k` | `qwen-plus` |
+| Search-enhanced query | `ernie-4.0-turbo` | `ernie-speed` |

@@ -159,6 +159,34 @@ model_list:
       supports_vision: false
       description: "Kimi Moonshot v1 128K — ultra-long context, document analysis"
 
+  # ============================================================
+  # ERNIE / 百度文心 — 搜索增强、企业生态
+  # ERNIE-Speed 有免费额度
+  # ============================================================
+  - model_name: ernie-4.0-turbo
+    litellm_params:
+      model: openai/ernie-4.0-turbo-8k
+      api_base: https://qianfan.baidubce.com/v2
+      api_key: os.environ/BAIDU_API_KEY
+    model_info:
+      mode: chat
+      max_tokens: 8192
+      supports_function_calling: true
+      supports_vision: false
+      description: "ERNIE-4.0-Turbo — Baidu flagship, search-enhanced, strong Chinese"
+
+  - model_name: ernie-speed
+    litellm_params:
+      model: openai/ernie-speed-128k
+      api_base: https://qianfan.baidubce.com/v2
+      api_key: os.environ/BAIDU_API_KEY
+    model_info:
+      mode: chat
+      max_tokens: 131072
+      supports_function_calling: true
+      supports_vision: false
+      description: "ERNIE-Speed — Baidu lightweight, free tier, 128K context"
+
 litellm_settings:
   set_verbose: false
   drop_params: true

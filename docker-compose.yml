@@ -37,6 +37,7 @@ services:
       QWEN_API_KEY: ${QWEN_API_KEY:-}
       ZHIPU_API_KEY: ${ZHIPU_API_KEY:-}
       MOONSHOT_API_KEY: ${MOONSHOT_API_KEY:-}
+      BAIDU_API_KEY: ${BAIDU_API_KEY:-}
       UI_USERNAME: ${UI_USERNAME:-admin}
       UI_PASSWORD: ${UI_PASSWORD:-}
     volumes:

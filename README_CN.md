@@ -1,6 +1,6 @@
 # Chinai Gateway
 
-**一条命令，把 DeepSeek、Qwen、GLM、Kimi 统一成一个 OpenAI 兼容接口。**
+**一条命令，把 DeepSeek、Qwen、GLM、Kimi、ERNIE 统一成一个 OpenAI 兼容接口。**
 
 自己部署，用自己的 Key，数据不经过第三方。
 
@@ -99,6 +99,8 @@ print(response.choices[0].message.content)
 | `glm-4v-plus` | 智谱 GLM | 中文 OCR | ¥5/百万 | ¥5/百万 |
 | `kimi` | 月之暗面 | 文档分析 | ¥12/百万 | ¥12/百万 |
 | `kimi-128k` | 月之暗面 | 超长上下文 | ¥60/百万 | ¥60/百万 |
+| `ernie-4.0-turbo` | 百度文心 | 搜索增强中文 | ¥4/百万 | ¥12/百万 |
+| `ernie-speed` | 百度文心 | 快速+免费额度 | 免费 | 免费 |
 
 *价格仅供参考，以各平台官网为准。*
 
@@ -112,6 +114,7 @@ print(response.choices[0].message.content)
 | **通义千问** | [dashscope.console.aliyun.com](https://dashscope.console.aliyun.com) | 需阿里云账号 |
 | **智谱 GLM** | [open.bigmodel.cn](https://open.bigmodel.cn) | GLM-4-Flash 有免费额度 |
 | **月之暗面 Kimi** | [platform.moonshot.cn](https://platform.moonshot.cn) | 长上下文专家 |
+| **百度文心 ERNIE** | [console.bce.baidu.com/qianfan](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application) | ERNIE-Speed 免费额度 |
 
 ## 常见问题
 
