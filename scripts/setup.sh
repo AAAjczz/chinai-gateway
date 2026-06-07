@@ -154,7 +154,7 @@ info "Running quick verification..."
 RESPONSE=$(curl -s -X POST http://localhost:4000/v1/chat/completions \
   -H "Authorization: Bearer ${MASTER_KEY}" \
   -H "Content-Type: application/json" \
-  -d '{"model":"deepseek-chat","messages":[{"role":"user","content":"Hi"}]}' 2>&1 || true)
+  -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hi"}]}' 2>&1 || true)
 
 if echo "$RESPONSE" | grep -q '"content"'; then
     log "API test passed — gateway is working!"

@@ -4,6 +4,16 @@
 
 自己部署，用自己的 Key，数据不经过第三方。
 
+```bash
+# 在线体验（无需部署）
+curl -X POST https://chinaigateway.xyz/v1/chat/completions \
+  -H "Authorization: Bearer sk-IxF6ZNzPH_M-4_LyxB8Dlg" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"你好"}]}'
+```
+
+> 演示 Key 为只读，有严格限速。生产环境请[自行部署](#快速开始)。
+
 ## 为什么
 
 国产大模型比国外便宜 10 倍以上。但每家平台注册、认证、API 格式都不一样。OpenRouter 解决了统一接入的问题——但它是闭源的，你的数据经过他们的服务器。
@@ -28,7 +38,7 @@
 ### 1. 克隆并配置
 
 ```bash
-git clone https://github.com/YOUR_USER/chinai-gateway.git
+git clone https://github.com/AAAjczz/chinai-gateway.git
 cd chinai-gateway
 cp .env.example .env
 # 编辑 .env —— 填入你的 API Key
@@ -47,7 +57,7 @@ curl -X POST http://localhost:4000/v1/chat/completions \
   -H "Authorization: Bearer 你的MASTER_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-pro",
     "messages": [{"role": "user", "content": "用一句话解释量子计算"}]
   }'
 ```
@@ -63,7 +73,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="deepseek-chat",
+    model="deepseek-v4-pro",
     messages=[{"role": "user", "content": "你好！"}]
 )
 print(response.choices[0].message.content)
@@ -77,8 +87,10 @@ print(response.choices[0].message.content)
 
 | 模型 | 厂商 | 优势 | 输入价格 | 输出价格 |
 |------|------|------|---------|---------|
-| `deepseek-chat` | DeepSeek V3 | 性价比之王 | ¥1/百万 | ¥2/百万 |
-| `deepseek-reasoner` | DeepSeek R1 | 数学/代码/推理 | ¥4/百万 | ¥16/百万 |
+| `deepseek-v4-pro` | DeepSeek V4 | Agent 专用，1M 上下文 | ¥3/百万 | ¥6/百万 |
+| `deepseek-v4-flash` | DeepSeek V4 | 轻量高速，思考模式 | ¥1/百万 | ¥2/百万 |
+| `deepseek-chat` | DeepSeek V3 | 旧版——2026.07 下线 | ¥1/百万 | ¥2/百万 |
+| `deepseek-reasoner` | DeepSeek R1 | 旧版——2026.07 下线 | ¥4/百万 | ¥16/百万 |
 | `qwen-plus` | 阿里通义千问 | 中文理解 | ¥2/百万 | ¥6/百万 |
 | `qwen-max` | 阿里通义千问 | 中文最强 | ¥20/百万 | ¥60/百万 |
 | `qwen-vl-plus` | 阿里通义千问 | 图片理解 | ¥2/百万 | ¥6/百万 |
@@ -113,7 +125,7 @@ OpenRouter 是第三方托管服务，数据经过他们。我们是开源软件
 能。编辑 `config.yaml`——LiteLLM 支持 100+ 提供商。参考 [LiteLLM 文档](https://docs.litellm.ai/docs/providers)。
 
 **能用于生产环境吗？**
-底层 LiteLLM 已经生产可用。高流量场景建议把 SQLite 换成 PostgreSQL。
+底层 LiteLLM 已生产可用，搭配 PostgreSQL 数据持久化。
 
 ## 许可
 
