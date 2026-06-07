@@ -38,7 +38,7 @@ Chinese AI models are 10x cheaper than Western alternatives. But each provider h
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/YOUR_USER/chinai-gateway.git
+git clone https://github.com/AAAjczz/chinai-gateway.git
 cd chinai-gateway
 cp .env.example .env
 # Edit .env — add your API keys
@@ -57,7 +57,7 @@ curl -X POST http://localhost:4000/v1/chat/completions \
   -H "Authorization: Bearer YOUR_MASTER_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-pro",
     "messages": [{"role": "user", "content": "Explain quantum computing in one sentence."}]
   }'
 ```
@@ -73,7 +73,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="deepseek-chat",
+    model="deepseek-v4-pro",
     messages=[{"role": "user", "content": "Hello!"}]
 )
 print(response.choices[0].message.content)
@@ -125,8 +125,8 @@ Your App → localhost:4000/v1/chat/completions (OpenAI format)
 DeepSeek  Qwen   GLM    Kimi
 ```
 
-- **Zero external dependency** — SQLite, no PostgreSQL needed
-- **Memory footprint** — ~300MB, runs on a $5 VPS
+- **Self-contained** — Docker Compose, PostgreSQL included
+- **Memory footprint** — ~430MB, runs on a $5 VPS
 - **Your API keys** stay in your `.env` file
 - **Your data** stays on your server
 
@@ -142,7 +142,7 @@ If you're fine with a third party seeing your requests, OpenRouter is great. If 
 Yes. Edit `config.yaml` — LiteLLM supports 100+ providers. See [LiteLLM docs](https://docs.litellm.ai/docs/providers).
 
 **Is this production-ready?**
-LiteLLM (the engine underneath) is. Chinai Gateway is the batteries-included config layer. For high-traffic production, swap SQLite for PostgreSQL.
+LiteLLM (the engine underneath) is. Chinai Gateway is the batteries-included config layer with PostgreSQL persistence.
 
 ## License
 
