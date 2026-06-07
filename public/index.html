@@ -159,7 +159,7 @@ section{position:relative;z-index:1;padding:100px 0}
 .pg-output .pg-obody .placeholder{color:var(--text3);font-style:italic}
 .pg-output .pg-obody .response{color:var(--text);white-space:pre-wrap}
 .pg-output .pg-obody .error{color:var(--red)}
-.pg-output .pg-obody .token-info{font-size:11px;color:var(--text3);margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.pg-output>.token-info{font-size:11px;color:var(--text3);padding:8px 20px 12px;border-top:1px solid var(--border)}
 .pg-output .pg-obody .token-info span{color:var(--accent);font-family:var(--mono)}
 .pg-loading{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:14px;padding:40px 20px}
 .pg-loading .spinner{width:16px;height:16px;border:2px solid var(--border);border-top:2px solid var(--accent);border-radius:50%;animation:spin .8s linear infinite}
@@ -467,8 +467,8 @@ footer .foot-right a:hover{color:#fff}
           </div>
           <div class="pg-obody" id="pgOutput">
             <div class="placeholder">Send a message to see the response here.</div>
-            <div id="pgTokenInfo" style="display:none" class="token-info"></div>
           </div>
+          <div id="pgTokenInfo" style="display:none" class="token-info"></div>
         </div>
       </div>
     </div>
