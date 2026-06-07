@@ -4,6 +4,16 @@
 
 Self-hosted. Bring your own keys. Zero data leaves your server.
 
+```bash
+# Try it on our demo server (no deployment needed)
+curl -X POST https://chinaigateway.xyz/v1/chat/completions \
+  -H "Authorization: Bearer sk-MORsuxkFFk-2iigyKXrbTA" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-v4-pro","messages":[{"role":"user","content":"Hello!"}]}'
+```
+
+> The demo key is read-only with a strict rate limit. For production, [deploy your own](#quick-start).
+
 ## Why
 
 Chinese AI models are 10x cheaper than Western alternatives. But each provider has a different API, different docs, different auth. OpenRouter solves this — but it's closed-source, and your data transits their servers.
