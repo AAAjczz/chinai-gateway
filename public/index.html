@@ -988,7 +988,7 @@ async function runPlayground(){
   o.innerHTML='<div class=pg-loading><div class=spinner></div>Calling '+m+'...</div>';ti.style.display='none';b.disabled=true;b.textContent='...';
   const ac=new AbortController(),to=setTimeout(()=>ac.abort(),30000);
   try{
-    const r=await fetch(DU,{method:'POST',headers:{'Authorization':'Bearer '+DK,'Content-Type':'application/json'},body:JSON.stringify({model:m,messages:[{role:'user',content:p}]}),signal:ac.signal});
+    const r=await fetch(DU+'?_t='+Date.now(),{method:'POST',cache:'no-store',headers:{'Authorization':'Bearer '+DK,'Content-Type':'application/json'},body:JSON.stringify({model:m,messages:[{role:'user',content:p}],stream:false}),signal:ac.signal});
     clearTimeout(to);
     const d=await r.json();
     if(!r.ok)throw new Error(d.error?.message||'HTTP '+r.status);
