@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_DB: litellm
       POSTGRES_USER: litellm
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?err: DB_PASSWORD must be set in .env}
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?err: DB_PASSWORD must be set in .env}"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -31,8 +31,8 @@ services:
     environment:
       DATABASE_URL: "postgresql://litellm:${DB_PASSWORD:?err: DB_PASSWORD must be set in .env}@db:5432/litellm"
       STORE_MODEL_IN_DB: "True"
-      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?err: LITELLM_MASTER_KEY must be set in .env}
-      LITELLM_SALT_KEY: ${LITELLM_SALT_KEY:?err: LITELLM_SALT_KEY must be set in .env}
+      LITELLM_MASTER_KEY: "${LITELLM_MASTER_KEY:?err: LITELLM_MASTER_KEY must be set in .env}"
+      LITELLM_SALT_KEY: "${LITELLM_SALT_KEY:?err: LITELLM_SALT_KEY must be set in .env}"
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       QWEN_API_KEY: ${QWEN_API_KEY:-}
       ZHIPU_API_KEY: ${ZHIPU_API_KEY:-}
