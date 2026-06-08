@@ -54,7 +54,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-> This exposes port 4000 on `0.0.0.0` by default. For production, put nginx or Caddy in front with TLS. See [Security](#security).
+> The gateway binds to `127.0.0.1` — it won't accept connections from outside your server. For public access, put nginx or Caddy in front with TLS. See [Security](#security).
 
 ### 3. Use it
 
