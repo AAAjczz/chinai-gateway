@@ -25,7 +25,10 @@ services:
       retries: 10
 
   litellm:
-    image: ghcr.io/berriai/litellm:main-stable
+    # Pre-configured Chinai Gateway image (5 Chinese AI providers, 14 models)
+    # Falls back to building locally if the image isn't available
+    image: ghcr.io/aaajczz/chinai-gateway:latest
+    build: .
     container_name: chinai-gateway
     restart: unless-stopped
     security_opt:

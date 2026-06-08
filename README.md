@@ -1,5 +1,8 @@
 # Chinai Gateway
 
+[![GitHub Release](https://img.shields.io/github/v/release/AAAjczz/chinai-gateway)](https://github.com/AAAjczz/chinai-gateway/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 **One command to unify DeepSeek, Qwen, GLM, Kimi, and ERNIE behind a single OpenAI-compatible API.**
 
 Self-hosted. Bring your own keys. Zero data leaves your server.
@@ -54,7 +57,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-> The gateway binds to `127.0.0.1` — it won't accept connections from outside your server. For public access, put nginx or Caddy in front with TLS. See [Security](#security).
+> Uses the pre-built `ghcr.io/aaajczz/chinai-gateway` image (or builds locally if unavailable). The gateway binds to `127.0.0.1` — it won't accept connections from outside your server. For public access, put nginx or Caddy in front with TLS. See [Security](#security).
 
 ### 3. Use it
 

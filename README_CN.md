@@ -1,5 +1,8 @@
 # Chinai Gateway
 
+[![GitHub Release](https://img.shields.io/github/v/release/AAAjczz/chinai-gateway)](https://github.com/AAAjczz/chinai-gateway/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 **一条命令，把 DeepSeek、Qwen、GLM、Kimi、ERNIE 统一成一个 OpenAI 兼容接口。**
 
 自己部署，用自己的 Key，数据不经过第三方。
@@ -54,7 +57,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-> 网关绑定 `127.0.0.1`——不会接受来自外部的连接。如需公网访问，请在前面加 nginx 或 Caddy 做 TLS 终止。参见[安全](#安全)。
+> 使用预构建的 `ghcr.io/aaajczz/chinai-gateway` 镜像（如果不可用则本地构建）。网关绑定 `127.0.0.1`——不会接受来自外部的连接。如需公网访问，请在前面加 nginx 或 Caddy 做 TLS 终止。参见[安全](#安全)。
 
 ### 3. 调用
 
