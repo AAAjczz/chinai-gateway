@@ -25,6 +25,7 @@ jobs:
         run: |
           git clone https://github.com/AAAjczz/gatekeeper.git /tmp/gatekeeper
           pip install /tmp/gatekeeper
+          # Or: pip install gatekeeper-audit
 
       - name: Run Audit
         continue-on-error: true
