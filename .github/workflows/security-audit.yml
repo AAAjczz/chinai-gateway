@@ -28,20 +28,21 @@ jobs:
 
       - name: Run Audit
         continue-on-error: true
-        run: python -m gatekeeper.cli audit -d . -f sarif
+        run: python -m gatekeeper.cli audit -d . -f sarif -o .
 
-      - name: Debug — show what was generated
+      - name: Rename SARIF to fixed name
         if: always()
         run: |
-          echo "=== reports/ ==="
-          ls -la reports/ 2>/dev/null || echo "(no reports/ directory)"
-          echo "=== pwd ==="
-          pwd
-          echo "=== gatekeeper version ==="
-          python -c "from gatekeeper import __version__; print(__version__)"
+          SARIF=$(ls gatekeeper_*.sarif 2>/dev/null | head -1)
+          if [ -n "$SARIF" ]; then
+            mv "$SARIF" gatekeeper-results.sarif
+            echo "Renamed $SARIF -> gatekeeper-results.sarif"
+          else
+            echo "No SARIF file found"
+          fi
 
-      - name: Upload SARIF
+      - name: Upload to GitHub Code Scanning
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: reports/gatekeeper_*.sarif
+          sarif_file: gatekeeper-results.sarif
