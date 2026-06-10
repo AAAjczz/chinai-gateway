@@ -12,6 +12,9 @@ pgdata/
 # Docker
 docker-compose.override.yml
 
+# Gatekeeper reports
+reports/
+
 # OS files
 .DS_Store
 Thumbs.db
