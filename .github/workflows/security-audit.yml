@@ -6,16 +6,18 @@ on:
   push:
     branches: [master, main]
   schedule:
-    - cron: "0 8 * * 1"  # every Monday 8am UTC
+    - cron: "0 8 * * 1"
 
 jobs:
   audit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # required for SARIF upload
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -23,9 +25,13 @@ jobs:
         run: pip install git+https://github.com/AAAjczz/gatekeeper.git
 
       - name: Run Audit
+        # Gatekeeper exits 1 when vulnerabilities found — that's the signal,
+        # not a CI failure. Continue regardless so SARIF uploads.
+        continue-on-error: true
         run: gatekeeper audit -d . -f sarif
 
       - name: Upload SARIF to GitHub
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: reports/gatekeeper_*.sarif
