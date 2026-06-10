@@ -1,5 +1,8 @@
 # .env — your secrets, never commit
 .env
+.env.*
+*.env
+!.env.example
 
 # LiteLLM data
 litellm-data/

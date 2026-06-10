@@ -1,5 +1,8 @@
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
+  # Rate limiting — defense-in-depth with Nginx layer on VPS
+  rpm_limit: 500
+  rpm_limit_per_key: 100
 
 model_list:
   # ============================================================

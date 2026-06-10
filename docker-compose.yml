@@ -12,6 +12,10 @@ services:
     restart: unless-stopped
     security_opt:
       - "no-new-privileges:true"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     environment:
       POSTGRES_DB: litellm
       POSTGRES_USER: litellm
@@ -33,6 +37,10 @@ services:
     restart: unless-stopped
     security_opt:
       - "no-new-privileges:true"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     ports:
       # Bind 127.0.0.1 — never expose LiteLLM directly to the internet.
       # Put nginx/Caddy in front with TLS. See docs/hardening.md
