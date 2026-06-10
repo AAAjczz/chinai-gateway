@@ -1,0 +1,15 @@
+# Gatekeeper config — accepted risks for chinai-gateway
+# These findings are known, documented, and accepted.
+
+ignore:
+  # Root with no-new-privileges is sufficient for MVP.
+  - DEP-001
+
+  # Writable rootfs is required — PostgreSQL writes data, LiteLLM writes logs.
+  - DEP-003
+
+  # :latest tag is intentional — self-built image with build: . fallback.
+  - DEP-004
+
+  # Dev key in .env is 24 chars — production should use 32+ but .env is gitignored.
+  - SEC-004
