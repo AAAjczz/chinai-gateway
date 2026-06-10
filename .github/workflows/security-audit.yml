@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write  # required for SARIF upload
+      security-events: write
     steps:
       - uses: actions/checkout@v4
 
@@ -21,16 +21,26 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Gatekeeper
-        run: pip install --no-cache-dir git+https://github.com/AAAjczz/gatekeeper.git
+      - name: Clone and Install Gatekeeper
+        run: |
+          git clone https://github.com/AAAjczz/gatekeeper.git /tmp/gatekeeper
+          pip install /tmp/gatekeeper
 
       - name: Run Audit
-        # Gatekeeper exits 1 when vulnerabilities found — that's the signal,
-        # not a CI failure. Continue regardless so SARIF uploads.
         continue-on-error: true
         run: python -m gatekeeper.cli audit -d . -f sarif
 
-      - name: Upload SARIF to GitHub
+      - name: Debug — show what was generated
+        if: always()
+        run: |
+          echo "=== reports/ ==="
+          ls -la reports/ 2>/dev/null || echo "(no reports/ directory)"
+          echo "=== pwd ==="
+          pwd
+          echo "=== gatekeeper version ==="
+          python -c "from gatekeeper import __version__; print(__version__)"
+
+      - name: Upload SARIF
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
