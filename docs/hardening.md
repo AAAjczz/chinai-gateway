@@ -1,6 +1,44 @@
-# Production Hardening Guide
+# chinai-gateway 安全加固指南
 
-Your Chinai Gateway instance works out of the box for local dev. Before you put it on a public server, do these things. In order.
+> 最后更新：2026-06-11 — Yakit + nuclei 自检补充
+
+## 自检发现的问题（已修复）
+
+| # | 漏洞 | 严重级别 | 状态 | 修复方式 |
+|---|------|---------|------|---------|
+| 1 | `/v1/models` 公开列出所有模型及详情 | Medium | ✅ | `config.yaml`: `disable_model_list_endpoint: true` |
+| 2 | `/metrics` 认证错误信息过于详细（泄露 Bearer 格式） | Low | ✅ | `config.yaml`: `require_auth_for_metrics_endpoint: true` |
+| 3 | 错误信息泄露 provider 内部配置 | Low | ✅ | `config.yaml`: `hide_model_details: true` + `redact_user_key_api_info: true` |
+| 4 | Swagger API 文档公开（`/`、`/openapi.json`） | Medium | ⚠️ Nginx | `nginx-chinai.conf` 封锁 `/`、`/docs`、`/openapi.json` |
+| 5 | 10 个安全响应头缺失 | Medium | ⚠️ Nginx | `nginx-chinai.conf` 添加 HSTS、CSP 等 10 个响应头 |
+| 6 | `/metrics` 外网可访问 | Medium | ⚠️ Nginx | Nginx 限制为内网 IP |
+| 7 | `/health` 返回 401（无需认证，但泄露 uvicorn 版本） | Low | ℹ️ 不修 | 健康检查端点，无害 |
+
+## 检测工具
+
+| 工具 | 用途 | 结果 |
+|------|------|------|
+| Yakit Web Fuzzer | 路径爆破 chinai-gateway | 发现 `/` (Swagger)、`/metrics`、`/config` |
+| nuclei | 2442 个模板扫描 | 发现 10 个缺失安全头 |
+| Yakit MITM | 流量拦截和修改 | 验证了请求修改→重放流程 |
+
+## config.yaml 安全配置（已应用）
+
+```yaml
+general_settings:
+  disable_model_list_endpoint: true   # 模型列表需认证
+
+litellm_settings:
+  require_auth_for_metrics_endpoint: true  # /metrics 需认证
+  redact_user_key_api_info: true           # 隐藏 API key 详情
+  hide_model_details: true                 # 隐藏 provider 配置详情
+  set_verbose: false                       # 关闭详细日志
+  drop_params: true                        # 丢弃未知参数
+```
+
+---
+
+# 以下为原部署加固内容
 
 ## 1. Firewall
 
@@ -25,55 +63,31 @@ sudo firewall-cmd --reload
 
 **Port 4000 should never face the internet.** The gateway binds to `127.0.0.1` by default — even if your firewall is misconfigured, it won't accept connections from outside.
 
-## 2. Reverse Proxy with TLS
+## 2. Reverse Proxy with TLS + Security Headers
 
-### nginx
+使用 `nginx-chinai.conf`（项目根目录），已包含：
+- TLS 1.2/1.3 配置
+- 10 个安全响应头（HSTS、CSP、X-Frame-Options 等）
+- 速率限制
+- `/`、`/docs`、`/openapi.json`、`/redoc` 路径封锁
+- `/metrics` 内网限制
+- 服务端版本信息隐藏
 
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com;
+### 部署（生产环境）
 
-    ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
-
-    # Modern TLS only
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
-
-    # Rate limit — prevents brute force and abuse
-    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
-    limit_req zone=api burst=20 nodelay;
-
-    location / {
-        proxy_pass http://127.0.0.1:4000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        # Timeouts
-        proxy_read_timeout 120s;
-        proxy_send_timeout 120s;
-    }
-}
-
-server {
-    listen 80;
-    server_name your-domain.com;
-    return 301 https://$host$request_uri;
-}
+```bash
+cp nginx-chinai.conf /etc/nginx/sites-available/chinai
+ln -s /etc/nginx/sites-available/chinai /etc/nginx/sites-enabled/
+# 改 server_name 和 ssl_certificate 路径
+vim /etc/nginx/sites-available/chinai
+# TLS 证书
+certbot --nginx -d api.your-domain.com
+# 重载
+nginx -t && systemctl reload nginx
 ```
 
-### Caddy (simpler, auto-TLS)
-
-```
-your-domain.com {
-    reverse_proxy 127.0.0.1:4000
-}
-```
-
-Caddy handles TLS certificates automatically. Two lines, done.
+### 本地开发
+无需 Nginx——LiteLLM 绑定 `127.0.0.1:4000`，外网不可达。
 
 ## 3. Create Scoped API Keys
 
@@ -90,12 +104,10 @@ Open the Admin UI at `https://your-domain.com/ui`, log in with your master key, 
 
 ## 4. Rate Limiting
 
-LiteLLM supports per-key rate limits. In the Admin UI, or via `config.yaml`:
-
 ```yaml
-litellm_settings:
-  rpm_per_key: 100        # Requests per minute, per key
-  rpm_per_key_max: 1000   # Hard cap
+general_settings:
+  rpm_limit: 500           # 全局每分钟请求上限
+  rpm_limit_per_key: 100   # 单 key 每分钟上限
 ```
 
 ## 5. Keep LiteLLM Updated
@@ -103,18 +115,11 @@ litellm_settings:
 Check [LiteLLM releases](https://github.com/BerriAI/litellm/releases) monthly.
 
 ```bash
-# Pull latest image
 docker compose pull litellm
-
-# Recreate container
 docker compose up -d
 ```
 
-The `main-stable` tag is updated with every stable release. We review releases before bumping the pinned tag in this repo.
-
 ## 6. Database Backups
-
-PostgreSQL data is in `./pgdata/`. Back it up:
 
 ```bash
 # Daily cron job
@@ -123,15 +128,38 @@ PostgreSQL data is in `./pgdata/`. Back it up:
 
 ## 7. Audit Your Keys
 
-Every month, go to the Admin UI → Keys tab. Delete keys you don't recognize. Rotate keys older than 90 days.
+每月去 Admin UI → Keys 页面，删除不认识的和 90 天以上的 key。
 
 ## Quick Checklist
 
 - [ ] Firewall: only 80/443 open
-- [ ] Reverse proxy: nginx or Caddy with TLS
+- [ ] Nginx + TLS with `nginx-chinai.conf`
+- [ ] Swagger/docs paths blocked at Nginx level
+- [ ] Model list hidden via `disable_model_list_endpoint`
+- [ ] Metrics endpoint restricted to internal
+- [ ] Security headers present (验证: `nuclei -t ~/nuclei-templates/http/misconfiguration/`)
 - [ ] `.env`: all defaults changed
 - [ ] Master key: never shared
 - [ ] Scoped keys: created for each application
 - [ ] Rate limiting: enabled
 - [ ] Backups: scheduled
 - [ ] LiteLLM: up to date
+
+## 部署后自检
+
+```bash
+# Swagger 应该 404
+curl -o /dev/null -w "%{http_code}\n" https://api.your-domain.com/openapi.json
+
+# Model list 应该 401
+curl -o /dev/null -w "%{http_code}\n" https://api.your-domain.com/v1/models
+
+# Metrics 应该 403（Nginx 封锁）
+curl -o /dev/null -w "%{http_code}\n" https://api.your-domain.com/metrics
+
+# 应该有 HSTS 头
+curl -I https://api.your-domain.com/health | grep -i strict-transport-security
+
+# nuclei 自动化扫描
+nuclei -u https://api.your-domain.com -t nuclei-templates/http/misconfiguration/ -silent
+```

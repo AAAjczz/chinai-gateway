@@ -3,6 +3,9 @@ general_settings:
   # Rate limiting — defense-in-depth with Nginx layer on VPS
   rpm_limit: 500
   rpm_limit_per_key: 100
+  # ========== 安全加固 ==========
+  # 禁止公开列出所有模型及其详情
+  disable_model_list_endpoint: true
 
 model_list:
   # ============================================================
@@ -194,6 +197,13 @@ litellm_settings:
   set_verbose: false
   drop_params: true
   request_timeout: 120
+  # ========== 安全加固 ==========
+  # /metrics 端点必须认证（禁止无认证访问）
+  require_auth_for_metrics_endpoint: true
+  # 隐藏错误信息中的配置细节
+  redact_user_api_key_info: true
+  # 禁止在响应中披露 provider 详情
+  hide_model_details: true
 
 router_settings:
   enable_fallbacks: true
